@@ -22,15 +22,20 @@ export default function Login() {
       return;
     }
 
-    console.log(event);
-    const { result, error } = await login(email, password);
-
-    if (error) {
-      return console.log(error)
-    }
-
-    return router.push("/")
+    await handleLoginApi()
   };
+
+  const handleLoginApi = async () => {
+    try {
+      const { result, error } = await login(email, password);
+      if (result) {
+        return router.push("/")
+      }
+    }
+    catch (error) {
+      console.error(error)
+    }
+  }
 
   const validateEmail = (email: string) => {
     return String(email)

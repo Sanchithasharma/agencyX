@@ -21,14 +21,19 @@ export default function SignUp() {
       return;
     }
 
-    console.log(event);
-    const { result, error } = await signUp(email, password);
+    await handleSignUpApi()
+  }
 
-    if (error) {
-      return console.log(error)
+  const handleSignUpApi = async () => {
+    try {
+      const { result, error } = await signUp(email, password);
+      if (result) {
+        return router.push("/")
+      }
     }
-
-    return router.push("/")
+    catch (error) {
+      console.error(error)
+    }
   }
 
   const validateEmail = (email: string) => {
