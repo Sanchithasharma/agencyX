@@ -89,6 +89,7 @@ export default function Home() {
           })}
       </div>
       {tags.length > 0 && (<button type="button" onClick={exportTagsAsJSON} className="mt-4 p-2 rounded cursor-pointer">Load Results</button>)}
+
     </main>
   );
 }
