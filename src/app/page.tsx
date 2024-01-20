@@ -2,7 +2,7 @@
 import { useState } from "react";
 import firebase_app from "../../config";
 import { getAuth } from "firebase/auth";
-
+import { useRouter } from 'next/navigation';
 import { getTags, getHtml } from "@/helpers/helpers";
 import { MetaTags } from "@/types";
 
@@ -12,9 +12,11 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState("");
   const auth = getAuth(firebase_app);
   const user = auth.currentUser;
+  const router = useRouter();
   console.log({ loggedInUser: user?.email });
-  if (auth != getAuth()) {
-    window.location.href = '/login';
+  if (!user) {
+
+    router.push('/login');
   }
   const validateAndSubmit = async () => {
     // Basic URL validation
