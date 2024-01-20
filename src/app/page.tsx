@@ -42,6 +42,6 @@ export default function Home() {
         </button>
       </form>
       {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
-
+    </main>
   );
 }
