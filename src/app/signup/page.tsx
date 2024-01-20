@@ -6,9 +6,28 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
 
   const handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event)
     event.preventDefault();
+
+    if (email === "" || !validateEmail(email)) {
+      alert('Please enter a valid email')
+      return;
+    }
+
+    if (password === "") {
+      alert('Please enter a password')
+      return;
+    }
+
+    console.log(event);
   }
+
+  const validateEmail = (email: string) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -17,7 +36,7 @@ export default function SignUp() {
           <div className="md:w-1/3">
             <label
               className="block text-gray-500 font-bold md:text-right mb-1 md:mb-0 pr-4"
-              htmlFor="inline-full-name"
+              htmlFor="nline-email"
             >
               Email
             </label>
@@ -26,7 +45,9 @@ export default function SignUp() {
             <input
               className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
               id="inline-email"
+              name="inline-email"
               type="email"
+              placeholder="Please enter your email"
               value={email}
                 onChange={(event) => {
                     setEmail(event.target.value)

@@ -2,21 +2,42 @@
 import { useState } from "react";
 
 export default function Login() {
-    const [email, setEmail] = useState("jane.doe@gmail.com");
-    const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("jane.doe@gmail.com");
+  const [password, setPassword] = useState("");
 
-    const handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event)
-        event.preventDefault();
-      }
-    
+  const handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+
+    if (email === "" || !validateEmail(email)) {
+      alert('Please enter a valid email')
+      return;
+    }
+
+    if (password === "") {
+      alert('Please enter a password')
+      return;
+    }
+
+    console.log(event);
+  };
+
+  const validateEmail = (email: string) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
 
   return (
     <main className="flex flex-col items-center justify-between p-24">
       <div className="w-full">
-        <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 bg-brown-300 w-[80%]" onSubmit={handleSubmit}>
+        <form
+          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          onSubmit={handleSubmit}
+        >
           <h1>Log in</h1>
-          <br/>
+          <br />
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -31,7 +52,7 @@ export default function Login() {
               placeholder="Please enter your email"
               value={email}
               onChange={(e) => {
-                setEmail(e.target.value)
+                setEmail(e.target.value);
               }}
             />
           </div>
@@ -49,7 +70,7 @@ export default function Login() {
               placeholder="******************"
               value={password}
               onChange={(e) => {
-                setPassword(e.target.value)
+                setPassword(e.target.value);
               }}
             />
             <p className="text-red-500 text-xs italic">
