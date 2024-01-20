@@ -1,11 +1,11 @@
 "use client";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (email === "" || !validateEmail(email)) {
