@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import firebase_app from "../../config";
 import { getAuth } from "firebase/auth";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { getTags, getHtml } from "@/helpers/helpers";
 import { MetaTags } from "@/types";
 
@@ -14,10 +14,13 @@ export default function Home() {
   const user = auth.currentUser;
   const router = useRouter();
   console.log({ loggedInUser: user?.email });
-  if (!user) {
 
-    router.push('/login');
-  }
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    }
+  }, [user]);
+
   const validateAndSubmit = async () => {
     // Basic URL validation
     const urlPattern = /^(http|https):\/\/[^ "]+$/;
@@ -92,7 +95,15 @@ export default function Home() {
             );
           })}
       </div>
-      {tags.length > 0 && (<button type="button" onClick={exportTagsAsJSON} className="mt-4 p-2 rounded cursor-pointer">Load Results</button>)}
+      {tags.length > 0 && (
+        <button
+          type="button"
+          onClick={exportTagsAsJSON}
+          className="mt-4 p-2 rounded cursor-pointer"
+        >
+          Load Results
+        </button>
+      )}
     </main>
   );
 }
