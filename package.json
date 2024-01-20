@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "isomorphic-fetch": "^3.0.0",
+    "jsdom": "^23.2.0",
     "firebase": "^10.7.2",
     "next": "14.1.0",
     "react": "^18",

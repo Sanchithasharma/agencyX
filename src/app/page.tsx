@@ -3,14 +3,17 @@ import { useState } from "react";
 import firebase_app from "../../config";
 import { getAuth } from "firebase/auth";
 
+import { getTags, getHtml } from "@/helpers/helpers";
+import { MetaTags } from "@/types";
 export default function Home() {
+  const [tags, settags] = useState<MetaTags[]>([]);
   const [urlInput, setUrlInput] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const auth = getAuth(firebase_app);
   const user = auth.currentUser;
   console.log({ loggedInUser: user?.email });
 
-  const validateAndSubmit = () => {
+  const validateAndSubmit = async () => {
     // Basic URL validation
     const urlPattern = /^(http|https):\/\/[^ "]+$/;
 
@@ -19,6 +22,16 @@ export default function Home() {
     } else {
       setErrorMessage("");
       console.log("Fetching meta tags for:", urlInput);
+
+      const html = await getHtml(urlInput);
+      if (html) {
+        const fetchedTags = await getTags(html);
+        settags(fetchedTags);
+        console.log(fetchedTags);
+      } else {
+        console.log("Failed to fetch HTML content.");
+        return null;
+      }
     }
   };
 
@@ -47,6 +60,17 @@ export default function Home() {
         </button>
       </form>
       {errorMessage && <p className="mt-2">{errorMessage}</p>}
+
+      <div>
+        {tags &&
+          tags.map(function (d, idx) {
+            return (
+              <li key={idx}>
+                {d.name} {d.property} : {d.content}
+              </li>
+            );
+          })}
+      </div>
     </main>
   );
 }
