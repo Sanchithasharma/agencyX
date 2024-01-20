@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
-import { getTags, getHtml } from "@/helpers/helpers";
-import { MetaTags } from "@/types";
+import { getTags, getHtml, get_website_info } from "@/helpers/helpers";
+import { MetaTags, TagInfo } from "@/types";
 export default function Home() {
   const [tags, settags] = useState<MetaTags[]>([]);
+  const [info, setinfo] = useState<TagInfo[]>([]);
   const [urlInput, setUrlInput] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -20,8 +21,11 @@ export default function Home() {
       const html = await getHtml(urlInput);
       if (html) {
         const fetchedTags = await getTags(html);
+        const fetchedinfo = await get_website_info(html, "div");
         settags(fetchedTags);
+        setinfo(fetchedinfo);
         console.log(fetchedTags);
+        console.log(fetchedinfo);
       } else {
         console.log("Failed to fetch HTML content.");
         return null;
