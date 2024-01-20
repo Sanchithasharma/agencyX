@@ -13,7 +13,9 @@ export default function Home() {
   const auth = getAuth(firebase_app);
   const user = auth.currentUser;
   console.log({ loggedInUser: user?.email });
-
+  if (auth != getAuth()) {
+    window.location.href = '/login';
+  }
   const validateAndSubmit = async () => {
     // Basic URL validation
     const urlPattern = /^(http|https):\/\/[^ "]+$/;
@@ -42,15 +44,15 @@ export default function Home() {
       return;
     }
 
-    const tagsJSON =JSON.stringify(tags, null, 2);
+    const tagsJSON = JSON.stringify(tags, null, 2);
 
     const blob = new Blob([tagsJSON], { type: "application/json" });
-    
+
     const anchor = document.createElement("a");
     anchor.href = URL.createObjectURL(blob);
     anchor.download = "meta-tags.json";
     anchor.click();
-  }; 
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
