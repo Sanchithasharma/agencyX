@@ -31,13 +31,12 @@ export default function Home() {
         const fetchedTags = await getTags(html);
         settags(fetchedTags);
 
-        const res = await setDoc(doc(db, "test", "test"), {
-          a: 1,
-          b: 2,
-          c: 3,
-        });
-
-        console.log("SUCCESFULLY UPDATED DATABASE", res);
+        if (user) {
+          const res = await setDoc(doc(db, user.email!, urlInput), {
+            metaTags: fetchedTags,
+          });
+          console.log("SUCCESFULLY UPDATED DATABASE", res);
+        }
       } else {
         console.log("Failed to fetch HTML content.");
         return null;
