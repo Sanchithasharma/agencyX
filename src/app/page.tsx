@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { getTags, getHtml } from "@/helpers/helpers";
-import { get } from "http";
 import { MetaTags } from "@/types";
 export default function Home() {
   const [tags, settags] = useState<MetaTags[]>([]);
@@ -18,21 +17,16 @@ export default function Home() {
       setErrorMessage("");
       console.log("Fetching meta tags for:", urlInput);
 
-
       const html = await getHtml(urlInput);
       if (html) {
-
-        settags(await getTags(html));
-        console.log(tags)
-
-      }
-      else {
-        console.log('Failed to fetch HTML content.')
-        return null
+        const fetchedTags = await getTags(html);
+        settags(fetchedTags);
+        console.log(fetchedTags);
+      } else {
+        console.log("Failed to fetch HTML content.");
+        return null;
       }
     }
-
-
   };
 
   return (
