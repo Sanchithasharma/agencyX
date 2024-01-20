@@ -54,6 +54,11 @@ export default function Home() {
         </button>
       </form>
       {errorMessage && <p className="mt-2">{errorMessage}</p>}
+
+      <div>
+        {tags && tags.map(function (d, idx) { return (<li key={idx}>{d.name} {d.property} : {d.content}</li>) })}
+      </div>
     </main>
+
   );
 }
