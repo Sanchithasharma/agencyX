@@ -32,9 +32,22 @@ export default function Home() {
         settags(fetchedTags);
 
         if (user) {
-          const res = await setDoc(doc(db, user.email!, urlInput), {
-            metaTags: fetchedTags,
-          });
+          // write to firestore
+          const res = await setDoc(
+            doc(
+              db,
+              // for our user document
+              user.email!,
+              // create an entry which is the url
+              encodeURIComponent(
+                urlInput.replace(/^(http:\/\/|https:\/\/)/, "")
+              )
+            ),
+            // that entry will have metaTags as their data
+            {
+              metaTags: fetchedTags,
+            }
+          );
           console.log("SUCCESFULLY UPDATED DATABASE", res);
         }
       } else {
