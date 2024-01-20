@@ -1,6 +1,6 @@
 import Image from "next/image";
 // import Login from '../app/authorization/login';
-import SignUp from '../app/authorization/signup';
+import SignUp from './signup/page';
 
 
 export default function Home() {
