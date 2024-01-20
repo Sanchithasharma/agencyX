@@ -33,9 +33,11 @@ export default function Login() {
                   {el}
                 </td>
                 <td className="p-2 border-b border-l text-left">
-                    <a href={el}>
+                    <button className="bg-brown-200 py-2 px-6 rounded-lg text-400 hover:bg-wheat" onClick={() => {
+                        alert(el)
+                    }}>
                         View
-                    </a>
+                    </button>
                 </td>
               </tr>
             ))}
