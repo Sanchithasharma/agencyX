@@ -5,6 +5,7 @@ import { getAuth } from "firebase/auth";
 
 import { getTags, getHtml } from "@/helpers/helpers";
 import { MetaTags } from "@/types";
+
 export default function Home() {
   const [tags, settags] = useState<MetaTags[]>([]);
   const [urlInput, setUrlInput] = useState("");
@@ -17,7 +18,7 @@ export default function Home() {
     // Basic URL validation
     const urlPattern = /^(http|https):\/\/[^ "]+$/;
 
-    if (!urlPattern.test(urlInput)) {
+    if (!urlInput || !urlPattern.test(urlInput)) {
       setErrorMessage("Please enter a valid URL");
     } else {
       setErrorMessage("");
@@ -34,6 +35,22 @@ export default function Home() {
       }
     }
   };
+
+  const exportTagsAsJSON = () => {
+    if (tags.length === 0) {
+      setErrorMessage("No meta tags found.");
+      return;
+    }
+
+    const tagsJSON =JSON.stringify(tags, null, 2);
+
+    const blob = new Blob([tagsJSON], { type: "application/json" });
+    
+    const anchor = document.createElement("a");
+    anchor.href = URL.createObjectURL(blob);
+    anchor.download = "meta-tags.json";
+    anchor.click();
+  }; 
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -71,6 +88,7 @@ export default function Home() {
             );
           })}
       </div>
+      {tags.length > 0 && (<button type="button" onClick={exportTagsAsJSON} className="mt-4 p-2 rounded cursor-pointer">Load Results</button>)}
     </main>
   );
 }
