@@ -3,7 +3,7 @@ import { useState } from "react";
 import firebase_app from "../../config";
 import { getAuth } from "firebase/auth";
 
-import { getTags, getHtml } from "@/helpers/helpers";
+import { getTags, getHtml, getTextContent, getDescriptionFromChatGPT } from "@/helpers/helpers";
 import { MetaTags } from "@/types";
 
 export default function Home() {
@@ -29,6 +29,15 @@ export default function Home() {
         const fetchedTags = await getTags(html);
         settags(fetchedTags);
         console.log(fetchedTags);
+
+        // clean html before passing to chatGPT
+        const textContent = await getTextContent(html);
+        console.log("getTextContent:", textContent )
+
+        const descriptionFromChatGPT = await getDescriptionFromChatGPT(textContent)
+        console.log("descriptionFromChatGPT:", descriptionFromChatGPT )
+
+
       } else {
         console.log("Failed to fetch HTML content.");
         return null;
