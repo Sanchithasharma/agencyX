@@ -27,16 +27,16 @@ export default function Home() {
       const html = await getHtml(urlInput);
       if (html) {
         const fetchedTags = await getTags(html);
-        settags(fetchedTags);
-        console.log(fetchedTags);
+        console.log("fetchedTags:", fetchedTags);
 
-        // clean html before passing to chatGPT
         const textContent = await getTextContent(html);
-        console.log("getTextContent:", textContent )
+        console.log("getTextContent:", textContent);
 
-        const descriptionFromChatGPT = await getDescriptionFromChatGPT(textContent)
-        console.log("descriptionFromChatGPT:", descriptionFromChatGPT )
+        const descriptionFromChatGPT = await getDescriptionFromChatGPT(textContent);
+        console.log("descriptionFromChatGPT:", descriptionFromChatGPT);
 
+        fetchedTags.push({ name: "generatedDescription", content: descriptionFromChatGPT ?? "" });
+        settags(fetchedTags);
 
       } else {
         console.log("Failed to fetch HTML content.");
