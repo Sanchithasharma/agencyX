@@ -22,17 +22,17 @@ export default function Login() {
           <thead>
             <tr>
               {TABLE_HEADER.map((key, i) => (
-                <th key={i}>{key}</th>
+                <th className="font-bold py-2 px-4 border-b border-l text-center" key={i}>{key}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {FETCHED_DATA.map((el, i) => (
               <tr key={i}>
-                <td className="p-2 border-b text-left">
+                <td className="p-2 border-b border-l text-left">
                   {el}
                 </td>
-                <td className="p-2 border-b text-left">
+                <td className="p-2 border-b border-l text-left">
                     <a href={el}>
                         View
                     </a>
