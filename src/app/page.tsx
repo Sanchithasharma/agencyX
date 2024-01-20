@@ -1,9 +1,14 @@
-"use client"; 
-import { useState }  from "react";
+"use client";
+import { useState } from "react";
+import firebase_app from "../../config";
+import { getAuth } from "firebase/auth";
 
 export default function Home() {
   const [urlInput, setUrlInput] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const auth = getAuth(firebase_app);
+  const user = auth.currentUser;
+  console.log({ loggedInUser: user?.email });
 
   const validateAndSubmit = () => {
     // Basic URL validation
