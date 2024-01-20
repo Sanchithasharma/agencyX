@@ -7,8 +7,8 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    color: {
-      brown: {
+    colors: {
+      'brown': {
         100: '#F1EDE4',
         200: '#CF8E56',
         300: '#864622',
