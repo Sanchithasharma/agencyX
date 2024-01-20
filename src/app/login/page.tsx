@@ -1,11 +1,15 @@
 "use client";
+import login from '../../firebase/login'
+import { useRouter } from 'next/navigation'
+
 import { FormEvent, useState } from "react";
 
 export default function Login() {
   const [email, setEmail] = useState("jane.doe@gmail.com");
   const [password, setPassword] = useState("");
+  const router = useRouter()
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (email === "" || !validateEmail(email)) {
@@ -18,8 +22,20 @@ export default function Login() {
       return;
     }
 
-    console.log(event);
+    await handleLoginApi()
   };
+
+  const handleLoginApi = async () => {
+    try {
+      const { result, error } = await login(email, password);
+      if (result) {
+        return router.push("/")
+      }
+    }
+    catch (error) {
+      console.error(error)
+    }
+  }
 
   const validateEmail = (email: string) => {
     return String(email)

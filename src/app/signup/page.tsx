@@ -1,11 +1,14 @@
 "use client";
+import signUp from "../../firebase/signup";
+import { useRouter } from 'next/navigation'
 import { FormEvent, useState } from "react";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter()
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (email === "" || !validateEmail(email)) {
@@ -18,7 +21,19 @@ export default function SignUp() {
       return;
     }
 
-    console.log(event);
+    await handleSignUpApi()
+  }
+
+  const handleSignUpApi = async () => {
+    try {
+      const { result, error } = await signUp(email, password);
+      if (result) {
+        return router.push("/")
+      }
+    }
+    catch (error) {
+      console.error(error)
+    }
   }
 
   const validateEmail = (email: string) => {

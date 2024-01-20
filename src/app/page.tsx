@@ -1,11 +1,17 @@
 "use client";
 import { useState } from "react";
+import firebase_app from "../../config";
+import { getAuth } from "firebase/auth";
+
 import { getTags, getHtml } from "@/helpers/helpers";
 import { MetaTags } from "@/types";
 export default function Home() {
   const [tags, settags] = useState<MetaTags[]>([]);
   const [urlInput, setUrlInput] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const auth = getAuth(firebase_app);
+  const user = auth.currentUser;
+  console.log({ loggedInUser: user?.email });
 
   const validateAndSubmit = async () => {
     // Basic URL validation
@@ -56,9 +62,15 @@ export default function Home() {
       {errorMessage && <p className="mt-2">{errorMessage}</p>}
 
       <div>
-        {tags && tags.map(function (d, idx) { return (<li key={idx}>{d.name} {d.property} : {d.content}</li>) })}
+        {tags &&
+          tags.map(function (d, idx) {
+            return (
+              <li key={idx}>
+                {d.name} {d.property} : {d.content}
+              </li>
+            );
+          })}
       </div>
     </main>
-
   );
 }
