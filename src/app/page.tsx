@@ -33,7 +33,6 @@ export default function Home() {
           placeholder="Enter a valid URL"
           className="w-full p-2 border rounded"
         />
-
         <button
           type="button"
           onClick={validateAndSubmit}
@@ -43,6 +42,6 @@ export default function Home() {
         </button>
       </form>
       {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
-    </main>
+
   );
 }
