@@ -1,9 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css?family=Work+Sans&display=swap');
+
 
 :root {
-  --foreground-rgb: 0, 0, 0;
+  --foreground-rgb: 169, 169, 169;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
@@ -17,14 +19,17 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
+  color: rgb(var(--foreground-r), var(--foreground-g), var(--foreground-b));
+  background: rgb(241,237,228);
+  /* background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
     )
-    rgb(var(--background-start-rgb));
+    rgb(var(--background-start-rgb)); */
+    font-family: 'Work Sans' !important ;
 }
+
 
 @layer utilities {
   .text-balance {
