@@ -1,4 +1,4 @@
-
+import { MetaTags } from "@/types";
 
 const { JSDOM } = require('jsdom');
 
@@ -18,7 +18,7 @@ async function getHtml(url: string): Promise<string | null> {
     }
 }
 
-async function getTags(html: string): Promise<Array<{ [key: string]: string }> | null> {
+async function getTags(html: string): Promise<MetaTags[]> {
     try {
         // Create a DOM from the HTML string using jsdom
         const dom = new JSDOM(html);
@@ -43,28 +43,8 @@ async function getTags(html: string): Promise<Array<{ [key: string]: string }> |
         return metaTagAttributes;
     } catch (error) {
         console.error('Error parsing HTML:', error);
-        return null;
+        return [];
     }
 }
 
-
-
-// Example usage:
-const url = 'https://www.news.com.au';
-getHtml(url)
-    .then(html => {
-        if (html) {
-            return getTags(html);
-        } else {
-            console.log('Failed to fetch HTML content.');
-            return null;
-        }
-    })
-    .then(metaTags => {
-        if (metaTags) {
-            console.log('Meta tags:');
-            metaTags.forEach(tag => {
-                console.log(tag);
-            });
-        }
-    });
+export { getTags, getHtml }
