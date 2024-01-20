@@ -5,7 +5,7 @@
 
 
 :root {
-  --foreground-rgb: 0, 0, 0;
+  --foreground-rgb: 169, 169, 169;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
@@ -19,7 +19,7 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  color: rgb(var(--foreground-r), var(--foreground-g), var(--foreground-b));
   background: rgb(241,237,228);
   /* background: linear-gradient(
       to bottom,
@@ -29,6 +29,7 @@ body {
     rgb(var(--background-start-rgb)); */
     font-family: 'Work Sans' !important ;
 }
+
 
 @layer utilities {
   .text-balance {

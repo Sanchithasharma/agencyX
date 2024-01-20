@@ -36,12 +36,12 @@ export default function Home() {
         <button
           type="button"
           onClick={validateAndSubmit}
-          className="mt-4 bg-green-500 text-white p-2 rounded cursor-pointer"
+          className="mt-4 p-2 rounded cursor-pointer"
         >
           Generate Report
         </button>
       </form>
-      {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
+      {errorMessage && <p className="mt-2">{errorMessage}</p>}
     </main>
   );
 }
