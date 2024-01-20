@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import { getTags, getHtml } from "@/helpers/helpers";
 import { MetaTags } from "@/types";
 import { signOut } from "../firebase/signout";
+import { db } from "../firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
+
 
 export default function Home() {
   const [tags, settags] = useState<MetaTags[]>([]);
@@ -49,7 +52,26 @@ export default function Home() {
       if (html) {
         const fetchedTags = await getTags(html);
         settags(fetchedTags);
-        console.log(fetchedTags);
+
+        if (user) {
+          // write to firestore
+          const res = await setDoc(
+            doc(
+              db,
+              // for our user document
+              user.email!,
+              // create an entry which is the url
+              encodeURIComponent(
+                urlInput.replace(/^(http:\/\/|https:\/\/)/, "")
+              )
+            ),
+            // that entry will have metaTags as their data
+            {
+              metaTags: fetchedTags,
+            }
+          );
+          console.log("SUCCESFULLY UPDATED DATABASE", res);
+        }
       } else {
         console.log("Failed to fetch HTML content.");
         return null;
