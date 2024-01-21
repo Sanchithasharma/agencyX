@@ -1,9 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import firebase_app from "../../config";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/navigation";
 import { getTags, getHtml, createChatGPTReport } from "@/helpers/helpers";
+
 import { MetaTags } from "@/types";
+import { signOut } from "../firebase/signout";
 import { db } from "../firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 
@@ -14,9 +17,29 @@ export default function Home() {
   const [report, setReport] = useState<string>('');
   const [urlInput, setUrlInput] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [user, setUser] = useState(getAuth(firebase_app).currentUser);
   const auth = getAuth(firebase_app);
-  const user = auth.currentUser;
+
+  const router = useRouter();
   console.log({ loggedInUser: user?.email });
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        localStorage.setItem("loggedInUser", JSON.stringify(user));
+      } else {
+        localStorage.removeItem("loggedInUser");
+      }
+      setUser(user);
+      if (!user) {
+        router.push("/login");
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [auth, router]);
 
   const validateAndSubmit = async () => {
     // Basic URL validation
@@ -61,6 +84,15 @@ export default function Home() {
       }
     }
   };
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      // The onAuthStateChanged will handle updating the user state
+      // and redirecting if necessary.
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
 
   const exportTagsAsJSON = () => {
     if (tags.length === 0) {
@@ -84,6 +116,15 @@ export default function Home() {
         <label className="block mb-2" htmlFor="urlInput">
           Enter Your Website URL:
         </label>
+        {user && (
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="bg-brown-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Logout
+          </button>
+        )}
         <input
           type="url"
           id="urlInput"
@@ -97,7 +138,7 @@ export default function Home() {
         <button
           type="button"
           onClick={validateAndSubmit}
-          className="mt-4 p-2 rounded cursor-pointer"
+          className="bg-brown-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
         >
           Generate Report
         </button>
