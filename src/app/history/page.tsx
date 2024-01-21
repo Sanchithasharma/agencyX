@@ -10,7 +10,6 @@ import { collection, getDocs, setDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import firebase_app from "../../../config";
 
-
 const TABLE_HEADER = ["URL", "View"];
 
 async function getAllDocuments(collectionName: string) {
@@ -37,15 +36,11 @@ export default function History() {
   const router = useRouter();
   console.log({ loggedInUser: user?.email });
 
-
-  
-
-
   useEffect(() => {
-<<<<<<< Updated upstream
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        localStorage.setItem("loggedInUser", JSON.stringify(user));
+        // @ts-ignore
+        localStorage.setItem("loggedInUser", user.email);
       } else {
         localStorage.removeItem("loggedInUser");
       }
@@ -69,13 +64,11 @@ export default function History() {
     }
   };
   useEffect(() => {
-=======
-    let user = sessionStorage.getItem("user");
-    
->>>>>>> Stashed changes
     const fetchDataAndNames = async () => {
       const loggedInUser = await getAuth(firebase_app);
       console.log({ currentUser: loggedInUser.currentUser });
+      let user = localStorage.getItem("loggedInUser");
+      console.log("User Email: ", user);
 
       // homework, correctly fetch the logged in user
       // @ts-ignore
@@ -89,15 +82,7 @@ export default function History() {
   return (
     <main className="flex flex-col items-center justify-between p-24">
       <h1>Past Reports</h1>
-      {user && (
-        <button
-          type="button"
-          onClick={handleLogout}
-          className="bg-brown-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-        >
-          Logout
-        </button>
-      )}
+
       <div className="p-8">
         <table className="table-auto border p-2">
           <thead>
@@ -151,6 +136,18 @@ export default function History() {
             </tr> */}
           </tbody>
         </table>
+
+        <div className="text-center pt-6">
+          {user && (
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="bg-brown-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            >
+              Logout
+            </button>
+          )}
+        </div>
       </div>
     </main>
   );
