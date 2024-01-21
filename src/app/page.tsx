@@ -131,12 +131,12 @@ export default function Home() {
 
       {showTable && (
         <div>
-          <table {...getTableProps()} className="mt-4">
+          <table {...getTableProps()} className="w-full border-collapse border rounded">
             <thead>
               {headerGroups.map((headerGroup, idx) => (
                 <tr {...(headerGroup.getHeaderGroupProps(), { key: idx })}>
                   {headerGroup.headers.map((column, idx) => (
-                    <th
+                    <th className="p-2 border"
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                     >
                       {column.render("Header")}
@@ -156,9 +156,9 @@ export default function Home() {
               {rows.map((row, idx) => {
                 prepareRow(row);
                 return (
-                  <tr {...(row.getRowProps(), { key: idx })}>
+                  <tr className={idx % 2 === 0 ? 'bg-gray-100' : 'bg-white'}{...(row.getRowProps(), { key: idx })}>
                     {row.cells.map((cell) => (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      <td className="p-2 border" {...cell.getCellProps()}>{cell.render("Cell")}</td>
                     ))}
                   </tr>
                 );
