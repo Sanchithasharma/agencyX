@@ -15,7 +15,7 @@ export function DialogBox(props) {
   return (
     <>
       <Dialog open={open}>
-        <DialogHeader>Its a simple dialog.</DialogHeader>
+        <DialogHeader>Meta data Information</DialogHeader>
         <DialogBody>
           {JSON.stringify(body)}
         </DialogBody>
