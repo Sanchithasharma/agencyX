@@ -120,21 +120,24 @@ export default function Home() {
       <body>
         <nav className="bg-gray-800 p-4">
           <div className="container mx-auto flex justify-between items-center">
-
-            <a href="#" className="text-white text-lg font-semibold">Intellitag</a>
-
+            <a href="#" className="text-white text-lg font-semibold">
+              Intellitag
+            </a>
 
             <div className="space-x-4">
-              <a href="/" className="text-white">Search</a>
-              <a href="/history" className="text-white" >History</a>
-              <a className=" text-white" onClick={handleLogout}>Logout</a>
-
+              <a href="/" className="text-white">
+                Search
+              </a>
+              <a href="/history" className="text-white">
+                History
+              </a>
+              <a className=" text-white" onClick={handleLogout}>
+                Logout
+              </a>
             </div>
-
           </div>
         </nav>
       </body>
-
 
       <form className="mt-8 flex flex-col gap-6 items-center">
         <label className="block mb-2" htmlFor="urlInput">
@@ -173,9 +176,9 @@ export default function Home() {
           <>
             <h2>Report</h2>
             <div>
-              {report.split("\n").map(function (item) {
+              {report.split("\n").map(function (item, idx) {
                 return (
-                  <span>
+                  <span key={idx}>
                     {item}
                     <br />
                   </span>
@@ -193,7 +196,6 @@ export default function Home() {
             );
           })} */}
       </div>
-
     </main>
   );
 }
