@@ -5,6 +5,8 @@ import { getAuth } from "firebase/auth";
 
 import { getTags, getHtml } from "@/helpers/helpers";
 import { MetaTags } from "@/types";
+import { db } from "../firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function Home() {
   const [tags, settags] = useState<MetaTags[]>([]);
@@ -28,7 +30,26 @@ export default function Home() {
       if (html) {
         const fetchedTags = await getTags(html);
         settags(fetchedTags);
-        console.log(fetchedTags);
+
+        if (user) {
+          // write to firestore
+          const res = await setDoc(
+            doc(
+              db,
+              // for our user document
+              user.email!,
+              // create an entry which is the url
+              encodeURIComponent(
+                urlInput.replace(/^(http:\/\/|https:\/\/)/, "")
+              )
+            ),
+            // that entry will have metaTags as their data
+            {
+              metaTags: fetchedTags,
+            }
+          );
+          console.log("SUCCESFULLY UPDATED DATABASE", res);
+        }
       } else {
         console.log("Failed to fetch HTML content.");
         return null;
@@ -42,15 +63,15 @@ export default function Home() {
       return;
     }
 
-    const tagsJSON =JSON.stringify(tags, null, 2);
+    const tagsJSON = JSON.stringify(tags, null, 2);
 
     const blob = new Blob([tagsJSON], { type: "application/json" });
-    
+
     const anchor = document.createElement("a");
     anchor.href = URL.createObjectURL(blob);
     anchor.download = "meta-tags.json";
     anchor.click();
-  }; 
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -88,7 +109,15 @@ export default function Home() {
             );
           })}
       </div>
-      {tags.length > 0 && (<button type="button" onClick={exportTagsAsJSON} className="mt-4 p-2 rounded cursor-pointer">Load Results</button>)}
+      {tags.length > 0 && (
+        <button
+          type="button"
+          onClick={exportTagsAsJSON}
+          className="mt-4 p-2 rounded cursor-pointer"
+        >
+          Load Results
+        </button>
+      )}
     </main>
   );
 }
