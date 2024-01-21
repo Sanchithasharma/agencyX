@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { signOut } from "../../firebase/signout";
 import { DialogBox } from "../../components/dialog";
+import { DialogBox2 } from "../../components/dialog2";
+
 import { db } from "../../firebase/firestore";
 import { collection, getDocs, setDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -20,7 +22,8 @@ async function getAllDocuments(collectionName: string) {
   const documents = snapshot.docs.map((doc) => {
     return {
       documentId: doc.id,
-      metaTags: doc.data(),
+      metaTags: doc.data().metaTags,
+      report: doc.data().report,
     };
   });
   return documents;
@@ -31,6 +34,7 @@ export default function History() {
   // refer to the implementation on the main app page
   const [documents, setDocuments] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
+  const [openReport, setOpenReport] = useState(false);
   const [user, setUser] = useState(getAuth(firebase_app).currentUser);
   const [loading, setLoading] = useState(true);
   const auth = getAuth(firebase_app);
@@ -121,13 +125,26 @@ export default function History() {
                             setOpen(true);
                           }}
                         >
-                          View
+                          MetaTags
+                        </button>
+                        <button
+                          className="bg-brown-200 py-2 px-6 rounded-lg text-400 hover:bg-wheat text-white"
+                          onClick={() => {
+                            setOpenReport(true);
+                          }}
+                        >
+                          Report
                         </button>
                       </td>
                       <DialogBox
                         open={open}
                         handleClose={() => setOpen(false)}
                         body={el.metaTags}
+                      />
+                      <DialogBox2
+                        open={openReport}
+                        handleClose={() => setOpenReport(false)}
+                        body={el.report}
                       />
                     </tr>
                   ))}
