@@ -26,7 +26,7 @@ export function DialogBox(props) {
             className="mr-1"
             onClick={handleClose}
           >
-            <span>Cancel</span>
+            <span>Close</span>
           </Button>
         </DialogFooter>
       </Dialog>
