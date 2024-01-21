@@ -78,6 +78,7 @@ export default function Home() {
             // that entry will have metaTags as their data
             {
               metaTags: fetchedTags,
+              report: generatedReport,
             }
           );
           console.log("SUCCESFULLY UPDATED DATABASE", res);
