@@ -10,6 +10,8 @@ import {
   getDescriptionFromChatGPT,
 } from "@/helpers/helpers";
 import { MetaTags } from "@/types";
+import { db } from "../firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 export default function Home() {
   const [tags, settags] = useState<MetaTags[]>([]);
@@ -60,6 +62,26 @@ export default function Home() {
         });
         settags(fetchedTags);
         setShowTable(true); // Set the state to show the table
+
+        if (user) {
+          // write to firestore
+          const res = await setDoc(
+            doc(
+              db,
+              // for our user document
+              user.email!,
+              // create an entry which is the url
+              encodeURIComponent(
+                urlInput.replace(/^(http:\/\/|https:\/\/)/, "")
+              )
+            ),
+            // that entry will have metaTags as their data
+            {
+              metaTags: fetchedTags,
+            }
+          );
+          console.log("SUCCESFULLY UPDATED DATABASE", res);
+        }
       } else {
         console.log("Failed to fetch HTML content.");
         return null;
@@ -131,12 +153,16 @@ export default function Home() {
 
       {showTable && (
         <div>
-          <table {...getTableProps()} className="w-full border-collapse border rounded">
+          <table
+            {...getTableProps()}
+            className="w-full border-collapse border rounded"
+          >
             <thead>
               {headerGroups.map((headerGroup, idx) => (
                 <tr {...(headerGroup.getHeaderGroupProps(), { key: idx })}>
                   {headerGroup.headers.map((column, idx) => (
-                    <th className="p-2 border"
+                    <th
+                      className="p-2 border"
                       {...column.getHeaderProps(column.getSortByToggleProps())}
                     >
                       {column.render("Header")}
@@ -156,9 +182,14 @@ export default function Home() {
               {rows.map((row, idx) => {
                 prepareRow(row);
                 return (
-                  <tr className={idx % 2 === 0 ? 'bg-gray-100' : 'bg-white'}{...(row.getRowProps(), { key: idx })}>
+                  <tr
+                    className={idx % 2 === 0 ? "bg-gray-100" : "bg-white"}
+                    {...(row.getRowProps(), { key: idx })}
+                  >
                     {row.cells.map((cell) => (
-                      <td className="p-2 border" {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      <td className="p-2 border" {...cell.getCellProps()}>
+                        {cell.render("Cell")}
+                      </td>
                     ))}
                   </tr>
                 );
