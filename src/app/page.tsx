@@ -2,7 +2,7 @@
 import { useState } from "react";
 import firebase_app from "../../config";
 import { getAuth } from "firebase/auth";
-
+import { useTable, useSortBy } from 'react-table';
 import { getTags, getHtml, getTextContent, getDescriptionFromChatGPT } from "@/helpers/helpers";
 import { MetaTags } from "@/types";
 
@@ -10,10 +10,27 @@ export default function Home() {
   const [tags, settags] = useState<MetaTags[]>([]);
   const [urlInput, setUrlInput] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [showTable, setShowTable] = useState(false);
   const auth = getAuth(firebase_app);
   const user = auth.currentUser;
   console.log({ loggedInUser: user?.email });
+  const columns = React.useMemo(
+    () => [
+      { Header: 'Name', accessor: 'name' },
+      { Header: 'Content', accessor: 'content' },
+      { Header: 'Chat GPT Notes', accessor: 'chatGptNotes' },
+      { Header: 'Chat GPT Suggestion', accessor: 'chatGptSuggestion' },
+    ],
+    []
+  );
 
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+  } = useTable({ columns, data: tags }, useSortBy);
   const validateAndSubmit = async () => {
     // Basic URL validation
     const urlPattern = /^(http|https):\/\/[^ "]+$/;
@@ -37,7 +54,7 @@ export default function Home() {
 
         fetchedTags.push({ name: "generatedDescription", content: descriptionFromChatGPT ?? "" });
         settags(fetchedTags);
-
+        setShowTable(true); // Set the state to show the table
       } else {
         console.log("Failed to fetch HTML content.");
         return null;
@@ -51,15 +68,15 @@ export default function Home() {
       return;
     }
 
-    const tagsJSON =JSON.stringify(tags, null, 2);
+    const tagsJSON = JSON.stringify(tags, null, 2);
 
     const blob = new Blob([tagsJSON], { type: "application/json" });
-    
+
     const anchor = document.createElement("a");
     anchor.href = URL.createObjectURL(blob);
     anchor.download = "meta-tags.json";
     anchor.click();
-  }; 
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -87,7 +104,7 @@ export default function Home() {
       </form>
       {errorMessage && <p className="mt-2">{errorMessage}</p>}
 
-      <div>
+      {/* <div>
         {tags &&
           tags.map(function (d, idx) {
             return (
@@ -96,9 +113,50 @@ export default function Home() {
               </li>
             );
           })}
-      </div>
+      </div> */}
       {tags.length > 0 && (<button type="button" onClick={exportTagsAsJSON} className="mt-4 p-2 rounded cursor-pointer">Load Results</button>)}
 
+      {showTable && (
+        <div>
+          <table {...getTableProps()} className="mt-4">
+            <thead>
+              {headerGroups.map(headerGroup => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map(column => (
+                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                      {column.render('Header')}
+                      <span>
+                        {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
+                      </span>
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {rows.map(row => {
+                prepareRow(row);
+                return (
+                  <tr {...row.getRowProps()}>
+                    {row.cells.map(cell => (
+                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {tags.length > 0 && (
+        <button
+          type="button"
+          onClick={exportTagsAsJSON}
+          className="mt-4 p-2 rounded cursor-pointer"
+        >
+          Load Results
+        </button>
+      )}
     </main>
   );
 }
