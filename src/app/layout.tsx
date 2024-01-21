@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <nav className="bg-brown-300 p-4">
+        <nav className="bg-brown-900 p-4">
           <div className="container mx-auto flex justify-between items-center">
 
             <a href="#" className="text-white text-lg font-semibold">Intellitag</a>

@@ -26,7 +26,7 @@ ul {
 
 body {
   color: rgb(var(--foreground-r), var(--foreground-g), var(--foreground-b));
-  background: rgb(241, 237, 228);
+  /* background: rgb(241, 237, 228); */
   /* background: linear-gradient(
       to bottom,
       transparent,
