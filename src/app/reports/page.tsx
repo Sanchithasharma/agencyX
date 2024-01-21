@@ -12,27 +12,40 @@ async function getAllDocumentNames(collectionName: string) {
   return documentNames;
 }
 
-export default function Report() {
-  useEffect(() => {
-    const fetchData = async () => {
-      const getRef = doc(db, "evgenia@mail.com", "heroicons.com%2F");
-      const docSnap = await getDoc(getRef);
+async function fetchData(collectionName: string, docName: string) {
+    try {
+      const collectionRef = collection(db, collectionName);
+      const documentRef = doc(collectionRef, docName);
+      
+      const docSnap = await getDoc(documentRef);
       if (docSnap.exists()) {
         console.log("Document data:", docSnap.data());
       } else {
-        // doc.data() will be undefined in this case
         console.log("No such document!");
       }
-      const docNames = await getAllDocumentNames("evgenia@mail.com");
-      console.log("Document names", docNames);
-    };
+    } catch (e) {
+      console.log("Error getting document:", e);
+    }
+  }
 
-    fetchData();
-  });
-
-  return (
-    <div>
-      <h1>Report</h1>
-    </div>
-  );
-}
+export default function Report() {
+    useEffect(() => {
+        const fetchDataAndNames = async () => {
+        const documentNames = await getAllDocumentNames("users");
+        console.log({ documentNames });
+      
+        const userEmail = "b.riwukaho@gmail.com";
+        const docName = "console.firebase.google.com%2Fu%2F0%2Fproject%2Fagencyx-851b6%2Fsettings%2Fgeneral";
+        const collectionName = userEmail;
+        fetchData(collectionName, docName);
+        };
+      
+        fetchDataAndNames();
+        }, []); 
+      
+        return (
+          <div>
+            <h1>Report</h1>
+          </div>
+        );
+    }
