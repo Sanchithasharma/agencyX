@@ -10,6 +10,22 @@ import {
 export function DialogBox2(props) {
   const { open, handleClose, body } = props;
 
+  const exportTagsAsJSON = () => {
+    if (body.length === 0) {
+      setErrorMessage("No meta tags found.");
+      return;
+    }
+
+    const tagsJSON = JSON.stringify(body, null, 2);
+
+    const blob = new Blob([tagsJSON], { type: "application/json" });
+
+    const anchor = document.createElement("a");
+    anchor.href = URL.createObjectURL(blob);
+    anchor.download = "meta-tags.json";
+    anchor.click();
+  };
+
   return (
     <>
       <Dialog open={open} size="xl">
@@ -25,6 +41,10 @@ export function DialogBox2(props) {
           })}
         </DialogBody>
         <DialogFooter>
+          <Button variant="text" color="red" className="mr-1" onClick={exportTagsAsJSON}>
+            <span>Download</span>
+          </Button>
+
           <Button
             variant="text"
             color="red"
