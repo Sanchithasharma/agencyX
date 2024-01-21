@@ -3,7 +3,7 @@ import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  projectId: "your-project-id",
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   // ... other config properties
 };
 
