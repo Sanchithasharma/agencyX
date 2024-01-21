@@ -14,7 +14,7 @@ export function DialogBox(props) {
   
   return (
     <>
-      <Dialog open={open}>
+      <Dialog open={open} size='xl'>
         <DialogHeader>Meta data Information</DialogHeader>
         <DialogBody>
           {JSON.stringify(body)}
