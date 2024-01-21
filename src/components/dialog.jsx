@@ -16,7 +16,7 @@ export function DialogBox(props) {
     <>
       <Dialog open={open} size='xl'>
         <DialogHeader>Meta data Information</DialogHeader>
-        <DialogBody>
+        <DialogBody className="h-[400px] overflow-auto">
           {JSON.stringify(body)}
         </DialogBody>
         <DialogFooter>

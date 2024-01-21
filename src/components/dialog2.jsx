@@ -14,10 +14,10 @@ export function DialogBox2(props) {
     <>
       <Dialog open={open} size="xl">
         <DialogHeader>Meta Tag Report</DialogHeader>
-        <DialogBody>
-          {body.split("\n").map(function (item) {
+        <DialogBody className="h-[400px] overflow-auto">
+          {body?.split("\n").map(function (item, i) {
             return (
-              <span>
+              <span key={i}>
                 {item}
                 <br />
               </span>
