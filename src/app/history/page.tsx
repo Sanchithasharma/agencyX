@@ -120,7 +120,7 @@ export default function History() {
                       </td>
                       <td className="p-2 border-b border-l text-left">
                         <button
-                          className="bg-brown-200 py-2 px-6 rounded-lg text-400 hover:bg-wheat text-white"
+                          className="bg-brown-200 py-2 px-6 rounded-lg text-400 hover:bg-wheat text-white mx-2"
                           onClick={() => {
                             setOpen(true);
                           }}
