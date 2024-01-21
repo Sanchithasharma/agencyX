@@ -9,7 +9,6 @@ import { signOut } from "../firebase/signout";
 import { db } from "../firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 
-
 export default function Home() {
   const [tags, settags] = useState<MetaTags[]>([]);
   const [urlInput, setUrlInput] = useState("");
@@ -105,20 +104,15 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <form className="mt-8">
+    <main className="flex min-h-screen flex-col items-stretch justify-between p-24">
+      <div className="p-4 text-center text-4xl text-brown-400 mb-10">
+        Intellitag
+      </div>
+
+      <form className="mt-8 flex flex-col gap-6 items-center">
         <label className="block mb-2" htmlFor="urlInput">
           Enter Your Website URL:
         </label>
-        {user && (
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="bg-brown-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Logout
-          </button>
-        )}
         <input
           type="url"
           id="urlInput"
@@ -132,7 +126,7 @@ export default function Home() {
         <button
           type="button"
           onClick={validateAndSubmit}
-          className="bg-brown-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="bg-brown-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-[300px] self-center"
         >
           Generate Report
         </button>
@@ -156,6 +150,16 @@ export default function Home() {
           className="mt-4 p-2 rounded cursor-pointer"
         >
           Load Results
+        </button>
+      )}
+
+      {user && (
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="bg-brown-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline self-center w-[150px]"
+        >
+          Logout
         </button>
       )}
     </main>
