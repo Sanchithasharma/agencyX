@@ -23,6 +23,8 @@ export default function Home() {
   const router = useRouter();
   console.log({ loggedInUser: user?.email });
 
+  console.log({ report });
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -139,14 +141,31 @@ export default function Home() {
         >
           Generate Report
         </button>
+        {tags.length > 0 && (
+          <button
+            type="button"
+            onClick={exportTagsAsJSON}
+            className="bg-brown-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mx-4"
+          >
+            Download Meta tags
+          </button>
+        )}
       </form>
       {errorMessage && <p className="mt-2">{errorMessage}</p>}
-
       <div>
         {report && (
           <>
             <h2>Report</h2>
-            <div>{report}</div>
+            <div>
+              {report.split("\n").map(function (item) {
+                return (
+                  <span>
+                    {item}
+                    <br />
+                  </span>
+                );
+              })}
+            </div>
           </>
         )}
         {/* {tags &&
@@ -158,16 +177,6 @@ export default function Home() {
             );
           })} */}
       </div>
-      {tags.length > 0 && (
-        <button
-          type="button"
-          onClick={exportTagsAsJSON}
-          className="mt-4 p-2 rounded cursor-pointer"
-        >
-          Load Results
-        </button>
-      )}
-
       {user && (
         <button
           type="button"
