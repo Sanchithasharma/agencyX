@@ -3,9 +3,11 @@ import login from '../../firebase/login'
 import { useRouter } from 'next/navigation'
 
 import { FormEvent, useState } from "react";
+import Link from 'next/link'
+
 
 export default function Login() {
-  const [email, setEmail] = useState("jane.doe@gmail.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter()
 
@@ -49,12 +51,13 @@ export default function Login() {
 
   return (
     <main className="flex flex-col items-center justify-between p-24">
-      <div className="w-full">
+      <div className="">
+
         <form
-          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-[500px]"
           onSubmit={handleSubmit}
         >
-          <h1>Log in</h1>
+          <h1 className='text-xl'>Log in</h1>
           <br />
           <div className="mb-4">
             <label
@@ -82,7 +85,7 @@ export default function Login() {
               Password
             </label>
             <input
-              className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
               id="password"
               type="password"
               placeholder="******************"
@@ -91,9 +94,9 @@ export default function Login() {
                 setPassword(e.target.value);
               }}
             />
-            <p className="text-red-500 text-xs italic">
+            {/* <p className="text-red-500 text-xs italic">
               Please choose a password.
-            </p>
+            </p> */}
           </div>
           <div className="flex items-center justify-between">
             <button
@@ -102,6 +105,10 @@ export default function Login() {
             >
               Log In
             </button>
+          </div>
+          <br />
+          <div className='text-sm'>
+            Not a user? Sign up <Link className="italic underline font-bold" href="/signup">here</Link>
           </div>
         </form>
       </div>
