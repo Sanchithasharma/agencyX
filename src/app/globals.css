@@ -18,16 +18,22 @@
   }
 }
 
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   color: rgb(var(--foreground-r), var(--foreground-g), var(--foreground-b));
-  background: rgb(241,237,228);
+  background: rgb(241, 237, 228);
   /* background: linear-gradient(
       to bottom,
       transparent,
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb)); */
-    /* font-family: 'Work Sans' !important ; */
+  /* font-family: 'Work Sans' !important ; */
 }
 
 
