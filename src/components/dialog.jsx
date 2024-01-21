@@ -7,13 +7,9 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-type DialogBoxProps = {
-  open: boolean,
-  handleClose: any
-}
 
  
-export function DialogBox(props: DialogBoxProps) {
+export function DialogBox(props) {
   const { open, handleClose } = props
   
   return (
