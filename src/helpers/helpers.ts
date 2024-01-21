@@ -50,6 +50,136 @@ async function getTags(html: string): Promise<MetaTags[]> {
 
 // A function that takes in a an array of meta tags and asks chatGPT to provide a report on those tags
 async function createChatGPTReport(tags: MetaTags[]): Promise<string | null> {
+    const tagsJSON = JSON.stringify(tags)
+
+    const exampleTags = JSON.stringify([
+        {
+            "charset": "UTF-8"
+        },
+        {
+            "name": "viewport",
+            "content": "width=device-width, initial-scale=1"
+        },
+        {
+            "name": "robots",
+            "content": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        },
+        {
+            "name": "description",
+            "content": "Planning for the future is essential for protecting your family and assets. Get help with creating or updating a Will and establishing Power of Attorney."
+        },
+        {
+            "property": "og:locale",
+            "content": "en_US"
+        },
+        {
+            "property": "og:type",
+            "content": "article"
+        },
+        {
+            "property": "og:title",
+            "content": "Wills & Estates Lawyers Brisbane - JMR Lawyers & Mediators"
+        },
+        {
+            "property": "og:description",
+            "content": "Planning for the future is essential for protecting your family and assets. Get help with creating or updating a Will and establishing Power of Attorney."
+        },
+        {
+            "property": "og:url",
+            "content": "https://www.jmrlawyers.com.au/wills-estate-lawyers/"
+        },
+        {
+            "property": "og:site_name",
+            "content": "JMR Lawyers & Mediators"
+        },
+        {
+            "property": "article:modified_time",
+            "content": "2024-01-15T00:53:18+00:00"
+        },
+        {
+            "name": "twitter:card",
+            "content": "summary_large_image"
+        },
+        {
+            "name": "twitter:label1",
+            "content": "Est. reading time"
+        },
+        {
+            "name": "twitter:data1",
+            "content": "4 minutes"
+        },
+        {
+            "name": "generator",
+            "content": "Elementor 3.18.3; features: e_dom_optimization, e_optimized_assets_loading, e_optimized_css_loading, additional_custom_breakpoints, block_editor_assets_optimize, e_image_loading_optimization; settings: css_print_method-external, google_font-enabled, font_display-auto"
+        },
+        {
+            "name": "msapplication-TileImage",
+            "content": "https://www.jmrlawyers.com.au/wp-content/uploads/android-chrome-512x512-1-300x300.png"
+        }
+    ])
+
+    const exampleReport = `Here's a report on the meta tags you provided:
+
+    1. charset: UTF-8
+       - No issues found.
+    
+    2. viewport: width=device-width, initial-scale=1
+       - No issues found.
+    
+    3. robots: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+       - No issues found.
+    
+    4. description: Planning for the future is essential for protecting your family and assets. Get help with creating or updating a Will and establishing Power of Attorney.
+       - No issues found.
+    
+    5. og:locale: en_US
+       - No issues found.
+    
+    6. og:type: article
+       - No issues found.
+    
+    7. og:title: Wills & Estates Lawyers Brisbane - JMR Lawyers & Mediators
+       - No issues found.
+    
+    8. og:description: Planning for the future is essential for protecting your family and assets. Get help with creating or updating a Will and establishing Power of Attorney.
+       - No issues found.
+    
+    9. og:url: https://www.jmrlawyers.com.au/wills-estate-lawyers/
+       - No issues found.
+    
+    10. og:site_name: JMR Lawyers & Mediators
+        - No issues found.
+    
+    11. article:modified_time: 2024-01-15T00:53:18+00:00
+        - No issues found.
+    
+    12. twitter:card: summary_large_image
+        - No issues found.
+    
+    13. twitter:label1: Est. reading time
+        - No issues found.
+    
+    14. twitter:data1: 4 minutes
+        - No issues found.
+    
+    15. generator:
+    - The "generator" meta tag reveals information about the website's framework and other specific settings. It is generally recommended to remove this tag or ensure that it does not disclose too much information about the website's technology stack and configurations for security reasons.
+
+    16. msapplication-TileImage:
+    - No issues found.
+
+    Suggestions for improvement:
+    1.  No issues or improvements found for the provided meta tags.
+    Missing Tags:
+1. Open Graph image (og:image): It is recommended to include an og:image meta tag to specify a visually appealing and relevant image that can be used when sharing the website on social media platforms.
+
+2. Canonical URL (rel="canonical"): The rel="canonical" meta tag is used to specify the preferred URL for a webpage to avoid duplicate content issues. It is advisable to include this tag to indicate the canonical version of the page if multiple URLs point to the same content.
+
+3. Favicon (link rel="icon"): This tag is used to define the website's favicon, which is the small image displayed in the browser's tab or bookmark bar. It is recommended to add a favicon to enhance the website's branding and user experience.
+
+Overall, the provided meta tags are well-structured and cover essential aspects. Consider adding the missing tags mentioned above to improve the website's functionality and optimize its visibility on search engines and social media platforms.
+`
+
     const response = await openai.chat.completions.create({
         messages: [
             {
@@ -58,7 +188,15 @@ async function createChatGPTReport(tags: MetaTags[]): Promise<string | null> {
             },
             {
                 "role": "user",
-                "content": `Here is an example of meta tags: ${JSON.stringify(tags)}`
+                "content": `Here is an example of meta tags: ${exampleTags}`
+            },
+            {
+                "role": "assistant",
+                "content": exampleReport
+            },
+            {
+                "role": "user",
+                "content": `Here is an example of meta tags: ${tagsJSON}`
             }
         ],
         model: "gpt-3.5-turbo",
