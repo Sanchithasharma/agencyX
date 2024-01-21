@@ -10,6 +10,7 @@ import { collection, getDocs, setDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import firebase_app from "../../../config";
 
+
 const TABLE_HEADER = ["URL", "View"];
 
 async function getAllDocuments(collectionName: string) {
@@ -37,10 +38,11 @@ export default function History() {
   console.log({ loggedInUser: user?.email });
 
 
-  let user = sessionStorage.getItem("user");
+  
 
 
   useEffect(() => {
+<<<<<<< Updated upstream
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         localStorage.setItem("loggedInUser", JSON.stringify(user));
@@ -67,11 +69,16 @@ export default function History() {
     }
   };
   useEffect(() => {
+=======
+    let user = sessionStorage.getItem("user");
+    
+>>>>>>> Stashed changes
     const fetchDataAndNames = async () => {
       const loggedInUser = await getAuth(firebase_app);
       console.log({ currentUser: loggedInUser.currentUser });
 
       // homework, correctly fetch the logged in user
+      // @ts-ignore
       const fetchedDocuments = await getAllDocuments(user);
       setDocuments(fetchedDocuments);
     };
