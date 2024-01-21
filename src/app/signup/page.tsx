@@ -28,6 +28,8 @@ export default function SignUp() {
     try {
       const { result, error } = await signUp(email, password);
       if (result) {
+        console.log(result)
+        sessionStorage.setItem("user", result?.user?.email);
         return router.push("/")
       }
     }

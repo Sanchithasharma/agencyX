@@ -12,37 +12,6 @@ import firebase_app from "../../../config";
 
 const TABLE_HEADER = ["URL", "View"];
 
-const QUERY_DATA = [
-  {
-    documentId:
-      "console.firebase.google.com%2Fu%2F0%2Fproject%2Fagencyx-851b6%2Fsettings%2Fgeneral",
-    metaTags: [
-      {
-        content: "origin",
-        name: "referrer",
-      },
-      {
-        content: "origin",
-        name: "referrer",
-      },
-    ],
-  },
-  {
-    documentId:
-      "stacoverflow.com%2Fquestions%2F69166454%2Ffirestore-v9-expected-first-argument-to-collection-to-be-a-collectionreference	",
-    metaTags: [
-      {
-        content: "origin",
-        name: "referrer",
-      },
-      {
-        content: "origin",
-        name: "referrer",
-      },
-    ],
-  },
-];
-
 async function getAllDocuments(collectionName: string) {
   console.log({ collectionName });
   const collectionRef = collection(db, collectionName);
@@ -66,6 +35,9 @@ export default function History() {
 
   const router = useRouter();
   console.log({ loggedInUser: user?.email });
+
+
+  let user = sessionStorage.getItem("user");
 
 
   useEffect(() => {
@@ -100,7 +72,7 @@ export default function History() {
       console.log({ currentUser: loggedInUser.currentUser });
 
       // homework, correctly fetch the logged in user
-      const fetchedDocuments = await getAllDocuments("b.riwukaho@gmail.com");
+      const fetchedDocuments = await getAllDocuments(user);
       setDocuments(fetchedDocuments);
     };
 

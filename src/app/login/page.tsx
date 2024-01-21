@@ -29,6 +29,7 @@ export default function Login() {
     try {
       const { result, error } = await login(email, password);
       if (result) {
+        sessionStorage.setItem("user", result?.user?.email);
         return router.push("/")
       }
     }
