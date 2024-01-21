@@ -3,7 +3,7 @@ import { useState } from "react";
 import firebase_app from "../../config";
 import { getAuth } from "firebase/auth";
 
-import { getTags, getHtml, getTextContent, getDescriptionFromChatGPT } from "@/helpers/helpers";
+import { getTags, getHtml, createChatGPTReport } from "@/helpers/helpers";
 import { MetaTags } from "@/types";
 
 export default function Home() {
@@ -27,15 +27,9 @@ export default function Home() {
       const html = await getHtml(urlInput);
       if (html) {
         const fetchedTags = await getTags(html);
-        console.log("fetchedTags:", fetchedTags);
-
-        const textContent = await getTextContent(html);
-        console.log("getTextContent:", textContent);
-
-        const descriptionFromChatGPT = await getDescriptionFromChatGPT(textContent);
-        console.log("descriptionFromChatGPT:", descriptionFromChatGPT);
-
-        fetchedTags.push({ name: "generatedDescription", content: descriptionFromChatGPT ?? "" });
+        const report = await createChatGPTReport(fetchedTags);
+        console.log(report);
+       
         settags(fetchedTags);
 
       } else {

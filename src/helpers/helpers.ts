@@ -48,6 +48,29 @@ async function getTags(html: string): Promise<MetaTags[]> {
     }
 }
 
+// A function that takes in a an array of meta tags and asks chatGPT to provide a report on those tags
+async function createChatGPTReport(tags: MetaTags[]): Promise<string | null> {
+    const response = await openai.chat.completions.create({
+        messages: [
+            {
+                "role": "system",
+                "content": "You are a helpful assistant who will be provided with an array of meta tags, and your task is to use that information to create a report on those tags. You should highlight if you think there are any issues with the tags, and provide suggestions on how to improve them. Also if there are tags that are missing highlight that information"
+            },
+            {
+                "role": "user",
+                "content": `Here is an example of meta tags: ${JSON.stringify(tags)}`
+            }
+        ],
+        model: "gpt-3.5-turbo",
+    });
+
+    return response.choices[0].message.content
+}
+
+// =========================================================================
+// The Below Functions Are Not Used In The App At This Time
+
+// This function is not currently being used
 async function getTextContent(html: string): Promise<string> {
     try {
         // Create a DOM from the HTML string using jsdom
@@ -67,6 +90,8 @@ async function getTextContent(html: string): Promise<string> {
     }
 }
 
+
+// This function is not currently being used
 async function getDescriptionFromChatGPT(textContent: string): Promise<string | null> {
     const example1_textContent = 'Home Designs Exclusively Designed With You In Mind With over 40 years experience designing and building award-winning, sustainable homes, we have a proud heritage in delivering quality, style and functionality. We create home designs unique to your personality, lifestyle and budget requirements through a consultative design and building process. Each design is completely tailored, because as designers and creators, we believe every home we create should be uniquely yours.Offering a comprehensive building design service, our in-house design team provides services customised to your project. This includes everything from concept design to colour selection, to 3D visualisations and detailed design documentation.When you choose Anstey Homes for your design and construction needs, our skilled designers, who possess extensive building expertise, will make sure to integrate intelligent design elements that minimise construction expenses, address sound-related concerns, optimise environmental advantages, and guarantee excellent structural integrity.This truly is building…by Design. View Our Showcase Of Designs Below Anstey Homes Introduction An introduction to Anstey Homes custom designs See Brochure Download Brochure Grand Designs Luxe living! Ultra-modern homes, epitomising beauty and grandeur See Brochure Download Brochure Granny Flats Elegant, functional and desirable granny flats See Brochure Download Brochure Small Sites Designs that don’t sacrifice style for size See Brochure Download Brochure Micro Tiny Homes Cost-effective homes that meet the requirements of the Building Code of Australia See Brochure Download Brochure One-Storey Homes A selection of our stylish, single storey homes See Brochure Download Brochure Rural Homes Rural site designs that offer an idyllic lifestyle See Brochure Download Brochure Beach Homes The beachside home youve been dreaming of is within reach See Brochure Download Brochure Dual Living Homes Cleverly designed homes for multi-generational living or an additional rental income See Brochure Download Brochure Homes For Narrow Lots Uniquely designed homes for narrow lots that optimse the use of available space See Brochure Download Brochure Two-Storey Homes Two-storey homes that are built to meet your unique lifestyle requirements See Brochure Download Brochure Elevated Homes We are specialists in elevated homes for flood prone zones See Brochure Download Brochure Farm Houses Beautiful farm houses to take advantage of the country lifestyle See Brochure Download Brochure Sloping-Down Site Homes Creative solutions for sites that slope downwards from the street See Brochure Download Brochure Sloping-Up Site Homes Creative solutions for sites that slope upwards from the street See Brochure Download Brochure Duplex Homes Luxury duplexes that present a perfect solution in sought-after suburbs See Brochure Download Brochure Ready To Experience The Anstey Homes Design And Build Difference? Let’s collaborate and create your unique, dream home at an affordable price. Click the button below for an obligation-free chat with our friendly team today.'
     const example1_returnedDescription = 'Explore our exquisite home designs, crafted for your unique lifestyle. Discover the perfect blend of beauty and functionality.'
@@ -115,4 +140,71 @@ async function getDescriptionFromChatGPT(textContent: string): Promise<string | 
     return response.choices[0].message.content
 }
 
-export { getTags, getHtml, getTextContent, getDescriptionFromChatGPT };
+
+
+// This function is not currently being used
+async function getChatGPTNotes(tags: MetaTags[]): Promise<string | null> {
+    const exampleInput = JSON.stringify([
+        {
+        "name": "viewport",
+        "content": "width=device-width, initial-scale=1",
+        },
+        {
+            "name": "robots",
+            "content": "index, follow",
+        },
+        {
+            "name": "og:title",
+            "content": "Wills & Estates Lawyers Brisbane - JMR Lawyers & Mediators",
+        }
+    ])
+
+    const example_desiredReturn = JSON.stringify([
+        {
+            "name": "viewport",
+            "content": "width=device-width, initial-scale=1",
+            "chatGPTNotes": "The viewport meta tag is used to control the size of the viewport. The current value is good for this meta tag.",
+            "chatGPTSuggestion": "width=device-width, initial-scale=1"
+        },
+        {
+            "name": "robots",
+            "content": "index, follow",
+            "chatGPTNotes": "The robots meta tag is used to control how search engines index your site. The current value is good for this meta tag but it can be expanded.",
+            "chatGPTSuggestion": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        },
+        {
+            "name": "og:title",
+            "content": "Wills & Estates Lawyers Brisbane - JMR Lawyers & Mediators",
+            "chatGPTNotes": "This is dummy text atm",
+            "chatGPTSuggestion": "Wills & Estates Lawyers Brisbane - JMR Lawyers & Mediators"
+        }
+    ])
+
+    const response = await openai.chat.completions.create({
+        messages: [
+            {
+                "role": "system",
+                "content": "You are a helpful assistant who will be provided with a meta tag name or property and the current value, and your task is to use that information to give a very brief explanation of that meta tag and let the user know if the current value is good or bad for that meta tag."
+            },
+            {
+                "role": "user",
+                "content": `Here is an example of metatags: ${exampleInput}`
+            },
+            {
+                "role": "assistant",
+                "content": example_desiredReturn
+            },
+            {
+                "role": "user",
+                "content": `Here is an example of metatags: ${ JSON.stringify(tags)}`
+            }
+        ],
+        model: "gpt-3.5-turbo",
+    });
+
+    return response.choices[0].message.content
+}
+
+
+
+export { getTags, getHtml, getTextContent, getDescriptionFromChatGPT, getChatGPTNotes, createChatGPTReport };
