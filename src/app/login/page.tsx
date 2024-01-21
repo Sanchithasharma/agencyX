@@ -3,9 +3,11 @@ import login from '../../firebase/login'
 import { useRouter } from 'next/navigation'
 
 import { FormEvent, useState } from "react";
+import Link from 'next/link'
+
 
 export default function Login() {
-  const [email, setEmail] = useState("jane.doe@gmail.com");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter()
 
@@ -52,7 +54,7 @@ export default function Login() {
           className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
           onSubmit={handleSubmit}
         >
-          <h1>Log in</h1>
+          <h1 className=''>Log in</h1>
           <br />
           <div className="mb-4">
             <label
@@ -89,9 +91,9 @@ export default function Login() {
                 setPassword(e.target.value);
               }}
             />
-            <p className="text-red-500 text-xs italic">
+            {/* <p className="text-red-500 text-xs italic">
               Please choose a password.
-            </p>
+            </p> */}
           </div>
           <div className="flex items-center justify-between">
             <button
@@ -100,6 +102,10 @@ export default function Login() {
             >
               Log In
             </button>
+          </div>
+          <br/>
+          <div className='text-sm'>
+            Not a logged in user? Sign up <Link className="italic underline font-bold" href="/signup">here</Link>
           </div>
         </form>
       </div>
