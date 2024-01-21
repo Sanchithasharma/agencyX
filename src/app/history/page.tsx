@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 
 import { FormEvent, useState } from "react";
 
+import {DialogBox} from '../../components/dialog'
+
 const TABLE_HEADER = ["URL", "View"];
 
 const FETCHED_DATA = [
@@ -12,7 +14,9 @@ const FETCHED_DATA = [
   "https://www.jmrlawyers.com.au/page-sitemap.xml",
 ];
 
-export default function Login() {
+export default function History() {
+  const [open,setOpen] = useState(false)
+  
   return (
     <main className="flex flex-col items-center justify-between p-24">
       <h1>Past Reports</h1>
@@ -34,7 +38,7 @@ export default function Login() {
                 </td>
                 <td className="p-2 border-b border-l text-left">
                     <button className="bg-brown-200 py-2 px-6 rounded-lg text-400 hover:bg-wheat" onClick={() => {
-                        alert(el)
+                        setOpen(true)
                     }}>
                         View
                     </button>
@@ -58,6 +62,7 @@ export default function Login() {
           </tbody>
         </table>
       </div>
+      <DialogBox open={open} handleClose={() => setOpen(false)}/>
     </main>
   );
 }
