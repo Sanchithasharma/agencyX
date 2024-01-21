@@ -49,12 +49,15 @@ export default function Login() {
 
   return (
     <main className="flex flex-col items-center justify-between p-24">
-      <div className="w-full">
+      <div className="">
+        <div className='p-4 text-center text-4xl text-brown-400 mb-10'>
+          Intellitag
+        </div>
         <form
-          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-[500px]"
           onSubmit={handleSubmit}
         >
-          <h1 className=''>Log in</h1>
+          <h1 className='text-xl'>Log in</h1>
           <br />
           <div className="mb-4">
             <label
@@ -105,7 +108,7 @@ export default function Login() {
           </div>
           <br/>
           <div className='text-sm'>
-            Not a logged in user? Sign up <Link className="italic underline font-bold" href="/signup">here</Link>
+            Not a user? Sign up <Link className="italic underline font-bold" href="/signup">here</Link>
           </div>
         </form>
       </div>
