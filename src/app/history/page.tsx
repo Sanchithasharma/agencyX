@@ -34,7 +34,6 @@ export default function History() {
   const auth = getAuth(firebase_app);
 
   const router = useRouter();
-  console.log({ loggedInUser: user?.email });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -68,7 +67,6 @@ export default function History() {
       const loggedInUser = await getAuth(firebase_app);
       console.log({ currentUser: loggedInUser.currentUser });
       let user = localStorage.getItem("loggedInUser");
-      console.log("User Email: ", user);
 
       // homework, correctly fetch the logged in user
       // @ts-ignore
@@ -81,9 +79,9 @@ export default function History() {
 
   return (
     <main className="flex flex-col items-center justify-between p-24">
-      <h1>Past Reports</h1>
+      <h1 className="text-4xl">Past Reports</h1>
 
-      <div className="p-8">
+      {documents.length > 0 ?(<div className="p-8">
         <table className="table-auto border p-2">
           <thead>
             <tr>
@@ -120,20 +118,6 @@ export default function History() {
                 />
               </tr>
             ))}
-            {/* <tr>
-              <td className="p-2 border-b text-left">
-                The Sliding Mr. Bones (Next Stop, Pottersville)
-              </td>
-              <td className="p-2 border-b text-left">Malcolm Lockyer</td>
-            </tr>
-            <tr>
-              <td className="p-2 border-b text-left">Witchy Woman</td>
-              <td className="p-2 border-b text-left">The Eagles</td>
-            </tr>
-            <tr>
-              <td className="p-2 border-b text-left">Shining Star</td>
-              <td className="p-2 border-b text-left">Earth, Wind, and Fire</td>
-            </tr> */}
           </tbody>
         </table>
 
@@ -148,7 +132,7 @@ export default function History() {
             </button>
           )}
         </div>
-      </div>
+      </div>) : <div className="m-10">There are no reports to show</div>}
     </main>
   );
 }
