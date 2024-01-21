@@ -8,6 +8,8 @@ import { MetaTags } from "@/types";
 import { db } from "../firebase/firestore";
 import { doc, setDoc } from "firebase/firestore";
 
+export const maxDuration = 60;
+
 export default function Home() {
   const [tags, settags] = useState<MetaTags[]>([]);
   const [urlInput, setUrlInput] = useState("");
@@ -31,7 +33,7 @@ export default function Home() {
         const fetchedTags = await getTags(html);
         const report = await createChatGPTReport(fetchedTags);
         console.log(report);
-       
+
         settags(fetchedTags);
 
         if (user) {
