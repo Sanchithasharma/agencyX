@@ -1,9 +1,8 @@
 "use client";
 import signUp from "../../firebase/signup";
-import { useRouter } from 'next/navigation'
-import { FormEvent, use, useState } from "react";
+import { useRouter } from 'next/navigation';
+import { FormEvent, useEffect, useState } from "react";
 import { db }  from "../../firebase/firestore";
-import { useEffect } from "react";
 import { collection, doc, getDoc } from "firebase/firestore"; 
 
 
@@ -11,7 +10,6 @@ export default function Report() {
     useEffect(() => {
         const fetchData = async () => {
             const getRef = doc(db, "evgenia@mail.com", "heroicons.com%252F");
-            console.log(getRef);
             const docSnap = await getDoc(getRef);
             if (docSnap.exists()) {
                 console.log("Document data:", docSnap.data());
