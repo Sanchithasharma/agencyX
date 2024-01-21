@@ -9,6 +9,7 @@ import { db } from "../../firebase/firestore";
 import { collection, getDocs, setDoc } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import firebase_app from "../../../config";
+import { Spinner } from "@material-tailwind/react";
 
 const TABLE_HEADER = ["URL", "View"];
 
@@ -31,12 +32,13 @@ export default function History() {
   const [documents, setDocuments] = useState<any[]>([]);
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState(getAuth(firebase_app).currentUser);
+  const [loading, setLoading] = useState(true);
   const auth = getAuth(firebase_app);
 
   const router = useRouter();
-  console.log({ loggedInUser: user?.email });
 
   useEffect(() => {
+    setLoading(true);
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // @ts-ignore
@@ -44,6 +46,7 @@ export default function History() {
       } else {
         localStorage.removeItem("loggedInUser");
       }
+
       setUser(user);
       if (!user) {
         router.push("/login");
@@ -51,6 +54,7 @@ export default function History() {
     });
 
     return () => {
+      setLoading(false);
       unsubscribe();
     };
   }, [auth, router]);
@@ -65,15 +69,17 @@ export default function History() {
   };
   useEffect(() => {
     const fetchDataAndNames = async () => {
+      setLoading(true);
+
       const loggedInUser = await getAuth(firebase_app);
       console.log({ currentUser: loggedInUser.currentUser });
       let user = localStorage.getItem("loggedInUser");
-      console.log("User Email: ", user);
 
       // homework, correctly fetch the logged in user
       // @ts-ignore
       const fetchedDocuments = await getAllDocuments(user);
       setDocuments(fetchedDocuments);
+      setLoading(false);
     };
 
     fetchDataAndNames();
@@ -81,74 +87,70 @@ export default function History() {
 
   return (
     <main className="flex flex-col items-center justify-between p-24">
-      <h1>Past Reports</h1>
+      <h1 className="text-4xl">Past Reports</h1>
 
-      <div className="p-8">
-        <table className="table-auto border p-2">
-          <thead>
-            <tr>
-              {TABLE_HEADER.map((key, i) => (
-                <th
-                  className="font-bold py-2 px-4 border-b border-l text-center"
-                  key={i}
-                >
-                  {key}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {documents.map((el, i) => (
-              <tr key={i}>
-                <td className="p-2 border-b border-l text-left">
-                  {el.documentId}
-                </td>
-                <td className="p-2 border-b border-l text-left">
+      {loading ? (
+        <Spinner className="h-12 w-12 m-10" />
+      ) : (
+        <div>
+          {documents.length > 0 ? (
+            <div className="p-8">
+              <table className="table-auto border p-2">
+                <thead>
+                  <tr>
+                    {TABLE_HEADER.map((key, i) => (
+                      <th
+                        className="font-bold py-2 px-4 border-b border-l text-center"
+                        key={i}
+                      >
+                        {key}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {documents.map((el, i) => (
+                    <tr key={i}>
+                      <td className="p-2 border-b border-l text-left">
+                        {el.documentId}
+                      </td>
+                      <td className="p-2 border-b border-l text-left">
+                        <button
+                          className="bg-brown-200 py-2 px-6 rounded-lg text-400 hover:bg-wheat text-white"
+                          onClick={() => {
+                            setOpen(true);
+                          }}
+                        >
+                          View
+                        </button>
+                      </td>
+                      <DialogBox
+                        open={open}
+                        handleClose={() => setOpen(false)}
+                        body={el.metaTags}
+                      />
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              <div className="text-center pt-6">
+                {user && (
                   <button
-                    className="bg-brown-200 py-2 px-6 rounded-lg text-400 hover:bg-wheat"
-                    onClick={() => {
-                      setOpen(true);
-                    }}
+                    type="button"
+                    onClick={handleLogout}
+                    className="bg-brown-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   >
-                    View
+                    Logout
                   </button>
-                </td>
-                <DialogBox
-                  open={open}
-                  handleClose={() => setOpen(false)}
-                  body={el.metaTags}
-                />
-              </tr>
-            ))}
-            {/* <tr>
-              <td className="p-2 border-b text-left">
-                The Sliding Mr. Bones (Next Stop, Pottersville)
-              </td>
-              <td className="p-2 border-b text-left">Malcolm Lockyer</td>
-            </tr>
-            <tr>
-              <td className="p-2 border-b text-left">Witchy Woman</td>
-              <td className="p-2 border-b text-left">The Eagles</td>
-            </tr>
-            <tr>
-              <td className="p-2 border-b text-left">Shining Star</td>
-              <td className="p-2 border-b text-left">Earth, Wind, and Fire</td>
-            </tr> */}
-          </tbody>
-        </table>
-
-        <div className="text-center pt-6">
-          {user && (
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="bg-brown-200 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            >
-              Logout
-            </button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="m-10">There are no reports to show</div>
           )}
         </div>
-      </div>
+      )}
     </main>
   );
 }
